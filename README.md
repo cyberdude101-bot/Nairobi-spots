@@ -1,2 +1,2 @@
-# EngageIQ
+# Nairobi spots
 learning from consumers
