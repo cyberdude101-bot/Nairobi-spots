@@ -27,7 +27,7 @@
             <p class="header-text">Nairobi's Restaurant Guide</p>
             <h1 class="header-title">Discover the Best<br /><em>Spots in Nairobi</em></h1>
             <p class="header-description">Curated restaurants across Nairobi, reviewed by real diners</p>
-            <div class="header-search"
+            <div class="header-search">
                 <input type="text" id="global-search" placeholder="Search for restaurants, cuisines, or locations" oninput="handleSearch(this.value)" />
                 <button onclick="clearSearch()">x</button>
                 <button class="search-button">Search</button>
@@ -35,6 +35,7 @@
         </div>
         </div>
 </header>
+
 
 <section class="locations-bar">
     <div class="locations-inner">
@@ -49,12 +50,15 @@
     </div>
     </section>
 
-    <div class="map-strip" idmap-strip>
-        <div class="map-strip-inner">
-            <p class="map-strip-label">Explore Nairobi on the Map</p>
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.123456789012!2d36.8219!3d-1.2921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10a123456789%3A0xabcdef1234567890!2sNairobi%20City%20Center!5e0!3m2!1sen!2ske!4v1234567890123" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                <main class="main">
+
+      <div class="map-strip" id="mapStrip">
+    <div id="map" style="width:100%;height:100%;"></div>
+  </div>
+  <script>const MAPS_API_KEY = 'AIzaSyDfyJAE4FY8HdSe7ujTczt_8I3_SDOg19U';</script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqc2GljNtXn0-KJPW4OXCsASNouV2cxrA&libraries=places&callback=initGoogleMap" async defer></script>
+
+
+  <main class="main">
     <div class="container">
       <div class="results-bar">
         <span id="resultsCount" class="results-count"></span>
@@ -71,5 +75,170 @@
     </div>
   </main>
 
+
+ <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modal">
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <div class="modal-img-wrap">
+        <img id="modalImg" src="" alt="" />
+        <div class="modal-img-overlay">
+          <span class="modal-location-badge" id="modalLocBadge"></span>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-name" id="modalName"></h2>
+            <p class="modal-address" id="modalAddress"></p>
+          </div>
+          <div class="modal-meta-right">
+            <div class="modal-rating" id="modalRating"></div>
+            <div class="modal-price" id="modalPrice"></div>
+          </div>
+        </div>
+
+        <div class="modal-info-row">
+          <span id="modalHours"></span>
+          <span id="modalPhone"></span>
+          <a id="modalDirections" href="#" target="_blank" class="directions-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M21.71 11.29l-9-9a1 1 0 0 0-1.42 0l-9 9a1 1 0 0 0 0 1.42l9 9a1 1 0 0 0 1.42 0l9-9a1 1 0 0 0 0-1.42zM14 14.5V12h-4v3H8v-4a1 1 0 0 1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+            Get Directions
+          </a>
+        </div>
+
+
+        <!-- LEADERBOARD -->
+  <section class="leaderboard-section" id="leaderboard">
+    <div class="container">
+      <div class="lb-header">
+        <div class="lb-title-wrap">
+          <p class="section-eyebrow">Live Rankings</p>
+          <h2 class="lb-title">Nairobi's Best Restaurants</h2>
+          <p class="lb-sub">Scored on ratings, customer sentiment &amp; popularity. Updates when new reviews come in.</p>
+        </div>
+        <div class="lb-filter-wrap">
+          <label class="lb-filter-label">Filter by neighbourhood</label>
+          <div class="lb-tabs" id="lbTabs">
+            <button class="lb-tab active" data-loc="all" onclick="filterLeaderboard('all', this)">All</button>
+            <button class="lb-tab" data-loc="westlands" onclick="filterLeaderboard('westlands', this)">Westlands</button>
+            <button class="lb-tab" data-loc="karen" onclick="filterLeaderboard('karen', this)">Karen</button>
+            <button class="lb-tab" data-loc="cbd" onclick="filterLeaderboard('cbd', this)">CBD</button>
+            <button class="lb-tab" data-loc="kilimani" onclick="filterLeaderboard('kilimani', this)">Kilimani</button>
+            <button class="lb-tab" data-loc="lavington" onclick="filterLeaderboard('lavington', this)">Lavington</button>
+          </div>
+        </div>
+      </div>
+      
+<div class="lb-legend">
+        <div class="lb-legend-item"><span class="lb-legend-dot rating-dot"></span><span>Rating <em>(40%)</em></span></div>
+        <div class="lb-legend-item"><span class="lb-legend-dot sentiment-dot"></span><span>Sentiment <em>(35%)</em></span></div>
+        <div class="lb-legend-item"><span class="lb-legend-dot popularity-dot"></span><span>Popularity <em>(25%)</em></span></div>
+        <div class="lb-legend-info">Score out of 100 pts</div>
+      </div>
+
+      <div class="lb-table-wrap">
+        <table class="lb-table">
+          <thead>
+            <tr>
+              <th class="th-rank">Rank</th>
+              <th class="th-restaurant">Restaurant</th>
+              <th class="th-score">Score</th>
+              <th class="th-bar">Score Breakdown</th>
+              <th class="th-rating">Rating</th>
+              <th class="th-sentiment">Sentiment</th>
+              <th class="th-pop">Reviews</th>
+              <th class="th-change">Change</th>
+            </tr>
+          </thead>
+          <tbody id="lbBody"></tbody>
+        </table>
+      </div>
+      <p class="lb-footnote">Rankings update live as new visitor reviews are submitted.</p>
+    </div>
+  </section>
+
+
+        <div class="modal-map-wrap" id="modalMapWrap">
+          <div id="modalGoogleMap" style="width:100%;height:100%;border-radius:8px;"></div>
+        </div>
+
+
+         <!-- Write a Review -->
+        <div class="modal-section write-review-section">
+          <h3 class="modal-section-title">Write your review</h3>
+          <p class="review-disclaimer">Have you visited? Share your honest experience — good or bad.</p>
+          <div class="review-form" id="reviewForm">
+            <div class="form-row two-col">
+              <div class="form-group">
+                <label>Your name</label>
+                <input type="text" id="reviewerName" placeholder="e.g. Amara N." />
+              </div>
+              <div class="form-group">
+                <label>Visit type</label>
+                <select id="visitType">
+                  <option value="dine-in">Dine-in</option>
+                  <option value="takeaway">Takeaway</option>
+                  <option value="date-night">Date Night</option>
+                  <option value="business">Business Meal</option>
+                  <option value="family">Family Outing</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Your rating</label>
+              <div class="star-picker" id="starPicker">
+                <span class="sp-star" data-v="1">★</span>
+                <span class="sp-star" data-v="2">★</span>
+                <span class="sp-star" data-v="3">★</span>
+                <span class="sp-star" data-v="4">★</span>
+                <span class="sp-star" data-v="5">★</span>
+              </div>
+              <span class="rating-label" id="ratingLabel">Click to rate</span>
+            </div>
+            <div class="form-group">
+              <label>Your review <span class="optional">(honest opinions welcome)</span></label>
+              <textarea id="reviewText" rows="4" placeholder="Describe the food, service, atmosphere… What would you tell a friend?"></textarea>
+            </div>
+            <div class="form-row verdict-row">
+              <label>Overall verdict</label>
+              <div class="verdict-buttons">
+                <button class="verdict-btn" data-v="recommend" onclick="setVerdict('recommend', this)">👍 Recommend</button>
+                <button class="verdict-btn" data-v="mixed" onclick="setVerdict('mixed', this)">😐 Mixed</button>
+                <button class="verdict-btn" data-v="avoid" onclick="setVerdict('avoid', this)">👎 Would not return</button>
+              </div>
+            </div>
+            <button class="submit-review-btn" onclick="submitReview()">Publish Review</button>
+          </div>
+          <div class="review-success hidden" id="reviewSuccess">
+            <div class="success-check">✓</div>
+            <p>Your review has been published. Thank you!</p>
+            <button class="link-btn" onclick="resetReviewForm()">Write another</button>
+          </div>
+
+
+
+         <!-- User Reviews -->
+          <div class="user-reviews-list" id="userReviewsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!--FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">Nairobi<span>Eats</span></div>
+      <p>Celebrating the best of Nairobi's food scene — one honest review at a time.</p>
+      <p class="footer-small">Restaurant data sourced from Google Places. Reviews are from real visitors.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
 </body>
 </html>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
